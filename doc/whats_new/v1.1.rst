@@ -587,6 +587,17 @@ Changelog
   and the boundaries are not set.
   :pr:`22027` by `Marie Lanternier <mlant>`.
 
+....................
+
+- |Fix| :func:`_preprocess` now converts special unicode characters such as '™️', '℠', 'Á', 
+  'È', 'Ç', 'Ñ', 'Û' to lowercase (i.e. tm, sm, a, e, c, n, u, respectively).
+  :pr:`3` by :user:`Pasa Ali Aslan <pasaaliaslan>`, :user:`Albert Li <lialber2>`, 
+  and :user:`Jack Woodger <jwoodger>`.
+
+:mod:`sklearn.feature_extraction`
+
+....................
+
 Code and Documentation Contributors
 -----------------------------------
 
