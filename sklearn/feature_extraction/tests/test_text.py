@@ -471,6 +471,23 @@ def test_countvectorizer_unicode_character_in_vocab():
     assert_array_equal(actual, expected)
 
 
+def test_countvectorizer_unicode_lowercase():
+    vocabulary = ['™️', '℠', 'Á', 'È', 'Ç', 'Ñ', 'Û']
+
+    vectorizer = CountVectorizer(
+        lowercase=True,
+        strip_accents='unicode',
+        # This test requires that individual letters are tokenized.
+        token_pattern=r'(?u)\b\w+\b'
+    )
+    vectorizer.fit_transform(vocabulary)
+
+    expected = ['a', 'c', 'e', 'n', 'sm', 'tm', 'u']
+    actual = vectorizer.get_feature_names_out()
+
+    assert_array_equal(actual, expected)
+
+
 def test_tf_transformer_feature_names_out():
     """Check get_feature_names_out for TfidfTransformer"""
     X = [[1, 1, 1], [1, 1, 0], [1, 0, 0]]
