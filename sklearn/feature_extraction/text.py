@@ -67,10 +67,10 @@ def _preprocess(doc, accent_function=None, lower=False):
     doc: str
         preprocessed string
     """
-    if lower:
-        doc = doc.lower()
     if accent_function is not None:
         doc = accent_function(doc)
+    if lower:
+        doc = doc.lower()
     return doc
 
 

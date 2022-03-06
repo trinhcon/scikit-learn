@@ -424,6 +424,12 @@ Changelog
 - |Fix| :func:`metrics.silhouette_score` now supports integer input for precomputed
   distances. :pr:`22108` by `Thomas Fan`_.
 
+- |Fix| :func:`metrics.ndcg_score` will now trigger a warning when the y_true
+  value contains a negative value. It will allow the user to still use negative
+  values, but the result may not be between 0 and 1.
+  :pr:`5` by :user:`Conroy Trinh <trinhcon>`, :user:`Ciaran Hogan <ciaran-h>`
+  and :user:`Victor Ko <VKo232>`
+
 :mod:`sklearn.manifold`
 .......................
 
@@ -580,6 +586,17 @@ Changelog
 - |Fix| :func:`check_scalar` raises an error when `include_boundaries={"left", "right"}`
   and the boundaries are not set.
   :pr:`22027` by `Marie Lanternier <mlant>`.
+
+....................
+
+- |Fix| :func:`_preprocess` now converts special unicode characters such as '™️', '℠', 'Á', 
+  'È', 'Ç', 'Ñ', 'Û' to lowercase (i.e. tm, sm, a, e, c, n, u, respectively).
+  :pr:`3` by :user:`Pasa Ali Aslan <pasaaliaslan>`, :user:`Albert Li <lialber2>`, 
+  and :user:`Jack Woodger <jwoodger>`.
+
+:mod:`sklearn.feature_extraction`
+
+....................
 
 Code and Documentation Contributors
 -----------------------------------
