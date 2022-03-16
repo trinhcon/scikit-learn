@@ -346,7 +346,11 @@ def _check_refit(search_cv, attr):
         )
 
 
-def _hash_param_names(param):
+def _hash_param_values(param):
+    """Hashes the values of a param dictionary into a single string.
+
+    Used to compare sets of hyper parameters lexicographically.
+    """
     res = ""
     for entry in param:
         res += str(param[entry])
@@ -756,7 +760,7 @@ class BaseSearchCV(MetaEstimatorMixin, BaseEstimator, metaclass=ABCMeta):
             params = results["params"]
             for i in range(len(results["params"])):
                 if results[f"rank_test_{refit_metric}"][i] == 1:
-                    param_hash = _hash_param_names(params[i])
+                    param_hash = _hash_param_values(params[i])
                     if not min_hash or param_hash < min_hash:
                         best_index = i
                         min_hash = param_hash
