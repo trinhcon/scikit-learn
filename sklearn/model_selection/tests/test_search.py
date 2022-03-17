@@ -12,6 +12,7 @@ import re
 import numpy as np
 import scipy.sparse as sp
 import pytest
+from sklearn import svm, datasets
 
 from sklearn.utils._testing import (
     assert_array_equal,
@@ -2266,6 +2267,89 @@ def test_search_cv_pairwise_property_equivalence_of_precomputed():
 
     attr_message = "GridSearchCV not identical with precomputed metric"
     assert (preds_original == preds_precomputed).all(), attr_message
+
+
+def test_grid_search_cv_SVC_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+    params1 = {
+        'C': [1, 101],
+        'break_ties': [False],
+        'cache_size': [2, 102],
+        'class_weight': ['balanced'],
+        'coef0': [3, 103],
+        'decision_function_shape': ['ovo', 'ovr'],
+    }
+
+    params2 = {
+        'decision_function_shape': ['ovr', 'ovo'],
+        'cache_size': [102, 2],
+        'class_weight': ['balanced'],
+        'C': [1, 101],
+        'break_ties': [False],
+        'coef0': [103, 3],
+    }
+
+    svc1 = svm.SVC()
+    clf1 = GridSearchCV(svc1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svc2 = svm.SVC()
+    clf2 = GridSearchCV(svc2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'C': 101,
+        'break_ties': False,
+        'cache_size': 102,
+        'class_weight': 'balanced',
+        'coef0': 103,
+        'decision_function_shape': 'ovo'
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
+def test_randomized_search_cv_SVC_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+    params1 = {
+        'C': [1, 101],
+        'break_ties': [False],
+        'cache_size': [2, 102],
+        'class_weight': ['balanced'],
+        'decision_function_shape': ['ovo', 'ovr'],
+    }
+
+    params2 = {
+        'decision_function_shape': ['ovr', 'ovo'],
+        'cache_size': [102, 2],
+        'class_weight': ['balanced'],
+        'C': [1, 101],
+        'break_ties': [False],
+    }
+
+    svc1 = svm.SVC()
+    clf1 = RandomizedSearchCV(svc1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svc2 = svm.SVC()
+    clf2 = RandomizedSearchCV(svc2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'decision_function_shape': 'ovo',
+        'class_weight': 'balanced',
+        'cache_size': 102,
+        'break_ties': False,
+        'C': 101
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
 
 
 @pytest.mark.parametrize(
