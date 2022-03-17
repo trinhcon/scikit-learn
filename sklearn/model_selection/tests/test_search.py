@@ -2443,11 +2443,11 @@ def test_randomized_search_cv_SVR_multiple_rank1_same_params():
     }
 
     svr1 = svm.SVR()
-    clf1 = GridSearchCV(svr1, params1, return_train_score=True)
+    clf1 = RandomizedSearchCV(svr1, params1, return_train_score=True)
     clf1.fit(iris.data, iris.target)
 
     svr2 = svm.SVR()
-    clf2 = GridSearchCV(svr2, params2, return_train_score=True)
+    clf2 = RandomizedSearchCV(svr2, params2, return_train_score=True)
     clf2.fit(iris.data, iris.target)
 
     expected = {
@@ -2687,16 +2687,158 @@ def test_randomized_search_cv_linearSVR_multiple_rank1_same_params():
     clf2.fit(iris.data, iris.target)
 
     expected = {
-        'verbose': 4, 
-        'tol': 1, 
-        'random_state': 5, 
-        'max_iter': 6, 
-        'loss': 'epsilon_insensitive', 
-        'intercept_scaling': 3, 
-        'fit_intercept': True, 
-        'epsilon': 0, 
-        'dual': True, 
+        'verbose': 4,
+        'tol': 1,
+        'random_state': 5,
+        'max_iter': 6,
+        'loss': 'epsilon_insensitive',
+        'intercept_scaling': 3,
+        'fit_intercept': True,
+        'epsilon': 0,
+        'dual': True,
         'C': 2
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
+def test_grid_search_cv_nuSVC_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+
+    params1 = {
+        'nu': [0.1],
+        'kernel': ['linear'],
+        'degree': [1],
+        'gamma': [2],
+        'coef0': [3],
+        'shrinking': [True],
+        'probability': [True, False],
+        'tol': [4],
+        'cache_size': [5],
+        'class_weight': ['balanced'],
+        'verbose': [True],
+        'max_iter': [6],
+        'decision_function_shape': ['ovo', 'ovr'],
+        'break_ties': [False],
+        'random_state': [8, 9],
+    }
+
+    params2 = {
+        'max_iter': [6],
+        'decision_function_shape': ['ovr', 'ovo'],
+        'break_ties': [False],
+        'random_state': [9, 8],
+        'coef0': [3],
+        'probability': [False, True],
+        'tol': [4],
+        'cache_size': [5],
+        'class_weight': ['balanced'],
+        'verbose': [True],
+        'nu': [0.1],
+        'kernel': ['linear'],
+        'shrinking': [True],
+        'degree': [1],
+        'gamma': [2],
+    }
+
+    svc1 = svm.NuSVC()
+    clf1 = GridSearchCV(svc1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svc2 = svm.NuSVC()
+    clf2 = GridSearchCV(svc2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'break_ties': False,
+        'cache_size': 5,
+        'class_weight': 'balanced',
+        'coef0': 3,
+        'decision_function_shape': 'ovo',
+        'degree': 1,
+        'gamma': 2,
+        'kernel': 'linear',
+        'max_iter': 6,
+        'nu': 0.1,
+        'probability': False,
+        'random_state': 8,
+        'shrinking': True,
+        'tol': 4,
+        'verbose': True
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
+def test_randomized_search_cv_nuSVC_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+
+    params1 = {
+        'nu': [0.1],
+        'kernel': ['linear'],
+        'degree': [1],
+        'gamma': [2],
+        'coef0': [3],
+        'shrinking': [True],
+        'probability': [True, False],
+        'tol': [4],
+        'cache_size': [5],
+        'class_weight': ['balanced'],
+        'verbose': [True],
+        'max_iter': [6],
+        'decision_function_shape': ['ovo', 'ovr'],
+        'break_ties': [False],
+        'random_state': [8, 9],
+    }
+
+    params2 = {
+        'max_iter': [6],
+        'decision_function_shape': ['ovr', 'ovo'],
+        'break_ties': [False],
+        'random_state': [9, 8],
+        'coef0': [3],
+        'probability': [False, True],
+        'tol': [4],
+        'cache_size': [5],
+        'class_weight': ['balanced'],
+        'verbose': [True],
+        'nu': [0.1],
+        'kernel': ['linear'],
+        'shrinking': [True],
+        'degree': [1],
+        'gamma': [2],
+    }
+
+    svc1 = svm.NuSVC()
+    clf1 = RandomizedSearchCV(svc1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svc2 = svm.NuSVC()
+    clf2 = RandomizedSearchCV(svc2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'verbose': True,
+        'tol': 4,
+        'shrinking': True,
+        'random_state': 8,
+        'probability': False,
+        'nu': 0.1,
+        'max_iter': 6,
+        'kernel': 'linear',
+        'gamma': 2,
+        'degree': 1,
+        'decision_function_shape': 'ovo',
+        'coef0': 3,
+        'class_weight': 'balanced',
+        'cache_size': 5,
+        'break_ties': False
     }
 
     actual1 = clf1.best_params_
