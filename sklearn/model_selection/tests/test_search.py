@@ -2469,6 +2469,130 @@ def test_randomized_search_cv_SVR_multiple_rank1_same_params():
     assert actual1 == expected and actual2 == expected
 
 
+def test_grid_search_cv_linearSVC_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+
+    params1 = {
+        'penalty': ['l2'],
+        'loss': ['hinge'],
+        'dual': [True],
+        'tol': [7, 1],
+        'C': [8, 2],
+        'multi_class': ['ovr'],
+        'fit_intercept': [True],
+        'intercept_scaling': [3, 9],
+        'class_weight': ['balanced'],
+        'verbose': [4],
+        'random_state': [5],
+        'max_iter': [6],
+    }
+
+    params2 = {
+        'intercept_scaling': [9, 3],
+        'class_weight': ['balanced'],
+        'multi_class': ['ovr'],
+        'fit_intercept': [True],
+        'loss': ['hinge'],
+        'dual': [True],
+        'C': [2, 8],
+        'verbose': [4],
+        'random_state': [5],
+        'max_iter': [6],
+        'tol': [1, 7],
+        'penalty': ['l2'],
+    }
+
+    svc1 = svm.LinearSVC()
+    clf1 = GridSearchCV(svc1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svc2 = svm.LinearSVC()
+    clf2 = GridSearchCV(svc2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'C': 2,
+        'class_weight': 'balanced',
+        'dual': True,
+        'fit_intercept': True,
+        'intercept_scaling': 3,
+        'loss': 'hinge',
+        'max_iter': 6,
+        'multi_class': 'ovr',
+        'penalty': 'l2',
+        'random_state': 5,
+        'tol': 1,
+        'verbose': 4
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
+def test_randomized_search_cv_linearSVC_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+
+    params1 = {
+        'penalty': ['l2'],
+        'loss': ['hinge'],
+        'dual': [True],
+        'tol': [7, 1],
+        'C': [8, 2],
+        'multi_class': ['ovr'],
+        'fit_intercept': [True],
+        'intercept_scaling': [3, 9],
+        'class_weight': ['balanced'],
+        'verbose': [4],
+        'random_state': [5],
+        'max_iter': [6],
+    }
+
+    params2 = {
+        'intercept_scaling': [9, 3],
+        'class_weight': ['balanced'],
+        'multi_class': ['ovr'],
+        'fit_intercept': [True],
+        'loss': ['hinge'],
+        'dual': [True],
+        'C': [2, 8],
+        'verbose': [4],
+        'random_state': [5],
+        'max_iter': [6],
+        'tol': [1, 7],
+        'penalty': ['l2'],
+    }
+
+    svc1 = svm.LinearSVC()
+    clf1 = RandomizedSearchCV(svc1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svc2 = svm.LinearSVC()
+    clf2 = RandomizedSearchCV(svc2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'verbose': 4,
+        'tol': 1,
+        'random_state': 5,
+        'penalty': 'l2',
+        'multi_class': 'ovr',
+        'max_iter': 6,
+        'loss': 'hinge',
+        'intercept_scaling': 3,
+        'fit_intercept': True,
+        'dual': True,
+        'class_weight': 'balanced',
+        'C': 2
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
 @pytest.mark.parametrize(
     "SearchCV, param_search",
     [(GridSearchCV, {"a": [0.1, 0.01]}), (RandomizedSearchCV, {"a": uniform(1, 3)})],
