@@ -2847,6 +2847,124 @@ def test_randomized_search_cv_nuSVC_multiple_rank1_same_params():
     assert (actual1 == expected and actual2 == expected)
 
 
+def test_grid_search_cv_nuSVR_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+
+    params1 = {
+        'nu': [0.1],
+        'C': [9, 7],
+        'kernel': ['linear'],
+        'degree': [1],
+        'gamma': [2],
+        'coef0': [3, 0],
+        'shrinking': [True],
+        'tol': [4],
+        'cache_size': [5, 8],
+        'verbose': [True],
+        'max_iter': [6],
+    }
+
+    params2 = {
+        'gamma': [2],
+        'coef0': [0, 3],
+        'shrinking': [True],
+        'verbose': [True],
+        'max_iter': [6],
+        'degree': [1],
+        'tol': [4],
+        'nu': [0.1],
+        'C': [7, 9],
+        'kernel': ['linear'],
+        'cache_size': [8, 5],
+    }
+
+    svr1 = svm.NuSVR()
+    clf1 = GridSearchCV(svr1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svr2 = svm.NuSVR()
+    clf2 = GridSearchCV(svr2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'C': 9,
+        'cache_size': 5,
+        'coef0': 0,
+        'degree': 1,
+        'gamma': 2,
+        'kernel': 'linear',
+        'max_iter': 6,
+        'nu': 0.1,
+        'shrinking': True,
+        'tol': 4,
+        'verbose': True
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
+def test_randomized_search_cv_nuSVR_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+
+    params1 = {
+        'nu': [0.1],
+        'C': [9, 7],
+        'kernel': ['linear'],
+        'degree': [1],
+        'gamma': [2],
+        'coef0': [3, 0],
+        'shrinking': [True],
+        'tol': [4],
+        'cache_size': [5, 8],
+        'verbose': [True],
+        'max_iter': [6],
+    }
+
+    params2 = {
+        'gamma': [2],
+        'coef0': [0, 3],
+        'shrinking': [True],
+        'verbose': [True],
+        'max_iter': [6],
+        'degree': [1],
+        'tol': [4],
+        'nu': [0.1],
+        'C': [7, 9],
+        'kernel': ['linear'],
+        'cache_size': [8, 5],
+    }
+
+    svr1 = svm.NuSVR()
+    clf1 = RandomizedSearchCV(svr1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svr2 = svm.NuSVR()
+    clf2 = RandomizedSearchCV(svr2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'verbose': True,
+        'tol': 4,
+        'shrinking': True,
+        'nu': 0.1,
+        'max_iter': 6,
+        'kernel': 'linear',
+        'gamma': 2,
+        'degree': 1,
+        'coef0': 0,
+        'cache_size': 5,
+        'C': 9
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
 @pytest.mark.parametrize(
     "SearchCV, param_search",
     [(GridSearchCV, {"a": [0.1, 0.01]}), (RandomizedSearchCV, {"a": uniform(1, 3)})],
