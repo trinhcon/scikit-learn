@@ -2593,6 +2593,118 @@ def test_randomized_search_cv_linearSVC_multiple_rank1_same_params():
     assert (actual1 == expected and actual2 == expected)
 
 
+def test_grid_search_cv_linearSVR_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+
+    params1 = {
+        'epsilon': [0, 7],
+        'tol': [1, 8],
+        'C': [2, 9],
+        'loss': ['epsilon_insensitive'],
+        'fit_intercept': [True],
+        'intercept_scaling': [3],
+        'dual': [True],
+        'verbose': [4],
+        'random_state': [5],
+        'max_iter': [6]
+    }
+
+    params2 = {
+        'epsilon': [7, 0],
+        'C': [9, 2],
+        'loss': ['epsilon_insensitive'],
+        'random_state': [5],
+        'tol': [8, 1],
+        'fit_intercept': [True],
+        'max_iter': [6],
+        'intercept_scaling': [3],
+        'dual': [True],
+        'verbose': [4],
+    }
+
+    svr1 = svm.LinearSVR()
+    clf1 = GridSearchCV(svr1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svr2 = svm.LinearSVR()
+    clf2 = GridSearchCV(svr2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'C': 2,
+        'dual': True,
+        'epsilon': 0,
+        'fit_intercept': True,
+        'intercept_scaling': 3,
+        'loss': 'epsilon_insensitive',
+        'max_iter': 6,
+        'random_state': 5,
+        'tol': 1,
+        'verbose': 4
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
+def test_randomized_search_cv_linearSVR_multiple_rank1_same_params():
+    iris = datasets.load_iris()
+
+    params1 = {
+        'epsilon': [0, 7],
+        'tol': [1, 8],
+        'C': [2, 9],
+        'loss': ['epsilon_insensitive'],
+        'fit_intercept': [True],
+        'intercept_scaling': [3],
+        'dual': [True],
+        'verbose': [4],
+        'random_state': [5],
+        'max_iter': [6]
+    }
+
+    params2 = {
+        'epsilon': [7, 0],
+        'C': [9, 2],
+        'loss': ['epsilon_insensitive'],
+        'random_state': [5],
+        'tol': [8, 1],
+        'fit_intercept': [True],
+        'max_iter': [6],
+        'intercept_scaling': [3],
+        'dual': [True],
+        'verbose': [4],
+    }
+
+    svr1 = svm.LinearSVR()
+    clf1 = RandomizedSearchCV(svr1, params1, return_train_score=True)
+    clf1.fit(iris.data, iris.target)
+
+    svr2 = svm.LinearSVR()
+    clf2 = RandomizedSearchCV(svr2, params2, return_train_score=True)
+    clf2.fit(iris.data, iris.target)
+
+    expected = {
+        'verbose': 4, 
+        'tol': 1, 
+        'random_state': 5, 
+        'max_iter': 6, 
+        'loss': 'epsilon_insensitive', 
+        'intercept_scaling': 3, 
+        'fit_intercept': True, 
+        'epsilon': 0, 
+        'dual': True, 
+        'C': 2
+    }
+
+    actual1 = clf1.best_params_
+    actual2 = clf2.best_params_
+
+    assert (actual1 == expected and actual2 == expected)
+
+
 @pytest.mark.parametrize(
     "SearchCV, param_search",
     [(GridSearchCV, {"a": [0.1, 0.01]}), (RandomizedSearchCV, {"a": uniform(1, 3)})],
