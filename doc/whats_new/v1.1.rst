@@ -598,6 +598,19 @@ Changelog
 
 ....................
 
+- |Fix| :func:`_select_best_index` now returns the best_index according to 
+  the lexicographical order of the params instead of the order params appear 
+  in the list. :pr:`7` by :user:`Pasa Ali Aslan <pasaaliaslan>`, :user:`Albert Li <lialber2>`, 
+  :user:`Jack Woodger <jwoodger>`, :user:`Ciaran Hogan <ciaran-h>`, :user:`Victor Ko <VKo232>`,
+  and :user:`Conroy Trinh <trinhcon>`
+
+- |Enhancement| :add:`_hash_param_values` method for calculating the lexicographical
+  order of params. :pr:`7` by :user:`Pasa Ali Aslan <pasaaliaslan>`, :user:`Albert Li <lialber2>`, 
+  :user:`Jack Woodger <jwoodger>`, :user:`Ciaran Hogan <ciaran-h>`, :user:`Victor Ko <VKo232>`,
+  and :user:`Conroy Trinh <trinhcon>`
+
+....................
+
 Code and Documentation Contributors
 -----------------------------------
 
