@@ -609,7 +609,7 @@ Changelog
   :user:`Jack Woodger <jwoodger>`, :user:`Ciaran Hogan <ciaran-h>`, :user:`Victor Ko <VKo232>`,
   and :user:`Conroy Trinh <trinhcon>`
 
-:mod:`sklear.model_selection`
+:mod:`sklearn.model_selection`
 
 ....................
 
