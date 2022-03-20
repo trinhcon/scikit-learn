@@ -346,6 +346,17 @@ def _check_refit(search_cv, attr):
         )
 
 
+def _hash_param_values(param):
+    """Hashes the values of a param dictionary into a single string.
+
+    Used to compare sets of hyper parameters lexicographically.
+    """
+    res = ""
+    for entry in param:
+        res += str(param[entry])
+    return res
+
+
 def _estimator_has(attr):
     """Check if we can delegate a method to the underlying estimator.
 
@@ -744,7 +755,15 @@ class BaseSearchCV(MetaEstimatorMixin, BaseEstimator, metaclass=ABCMeta):
             if best_index < 0 or best_index >= len(results["params"]):
                 raise IndexError("best_index_ index out of range")
         else:
-            best_index = results[f"rank_test_{refit_metric}"].argmin()
+            min_hash = ""
+            best_index = 0
+            params = results["params"]
+            for i in range(len(results["params"])):
+                if results[f"rank_test_{refit_metric}"][i] == 1:
+                    param_hash = _hash_param_values(params[i])
+                    if not min_hash or param_hash < min_hash:
+                        best_index = i
+                        min_hash = param_hash
         return best_index
 
     def fit(self, X, y=None, *, groups=None, **fit_params):
@@ -1715,7 +1734,7 @@ class RandomizedSearchCV(BaseSearchCV):
     >>> clf = RandomizedSearchCV(logistic, distributions, random_state=0)
     >>> search = clf.fit(iris.data, iris.target)
     >>> search.best_params_
-    {'C': 2..., 'penalty': 'l1'}
+    {'C': 1..., 'penalty': 'l2'}
     """
 
     _required_parameters = ["estimator", "param_distributions"]
