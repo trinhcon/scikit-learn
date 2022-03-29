@@ -588,9 +588,10 @@ class OneVsRestClassifier(
         """Indicate if wrapped estimator is using a precomputed Gram matrix"""
         return getattr(self.estimator, "_pairwise", False)
 
-    def _more_tags(self):
+    def __sklearn_tags__(self):
         """Indicate if wrapped estimator is using a precomputed Gram matrix"""
-        return {"pairwise": _safe_tags(self.estimator, key="pairwise")}
+        more_tags = {"pairwise": _safe_tags(self.estimator, key="pairwise")}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 def _fit_ovo_binary(estimator, X, y, i, j):
@@ -907,9 +908,10 @@ class OneVsOneClassifier(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):
         """Indicate if wrapped estimator is using a precomputed Gram matrix"""
         return getattr(self.estimator, "_pairwise", False)
 
-    def _more_tags(self):
+    def __sklearn_tags__(self):
         """Indicate if wrapped estimator is using a precomputed Gram matrix"""
-        return {"pairwise": _safe_tags(self.estimator, key="pairwise")}
+        more_tags = {"pairwise": _safe_tags(self.estimator, key="pairwise")}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 class OutputCodeClassifier(MetaEstimatorMixin, ClassifierMixin, BaseEstimator):

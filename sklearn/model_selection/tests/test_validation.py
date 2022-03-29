@@ -2377,8 +2377,9 @@ def test_validation_pairwise():
 
     # pairwise tag is not consistent with pairwise attribute
     class IncorrectTagSVM(SVC):
-        def _more_tags(self):
-            return {"pairwise": False}
+        def __sklearn_tags__(self):
+            more_tags = {"pairwise": False}
+            return {**super().__sklearn_tags__(), **more_tags}
 
     svm = IncorrectTagSVM(kernel="precomputed")
     msg = "_pairwise was deprecated in 0.24 and will be removed in 1.1"

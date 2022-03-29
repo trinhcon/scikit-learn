@@ -2211,13 +2211,14 @@ def test_search_cv_pairwise_property_delegated_to_base_estimator(pairwise):
     """
 
     class TestEstimator(BaseEstimator):
-        def _more_tags(self):
-            return {"pairwise": pairwise}
+        def __sklearn_tags__(self):
+            more_tags = {"pairwise": pairwise}
+            return {**super().__sklearn_tags__(), **more_tags}
 
     est = TestEstimator()
     attr_message = "BaseSearchCV pairwise tag must match estimator"
     cv = GridSearchCV(est, {"n_neighbors": [10]})
-    assert pairwise == cv._get_tags()["pairwise"], attr_message
+    assert pairwise == cv.__sklearn_tags__()["pairwise"], attr_message
 
 
 # TODO: Remove in 1.1

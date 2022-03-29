@@ -12,14 +12,14 @@ class NoTagsEstimator:
 
 
 class MoreTagsEstimator:
-    def _more_tags(self):
+    def __sklearn_tags__(self):
         return {"allow_nan": True}
 
 
 @pytest.mark.parametrize(
     "estimator, err_msg",
     [
-        (BaseEstimator(), "The key xxx is not defined in _get_tags"),
+        (BaseEstimator(), "The key xxx is not defined in __sklearn_tags__"),
         (NoTagsEstimator(), "The key xxx is not defined in _DEFAULT_TAGS"),
     ],
 )
@@ -43,5 +43,5 @@ def test_safe_tags_error(estimator, err_msg):
 )
 def test_safe_tags_no_get_tags(estimator, key, expected_results):
     # check the behaviour of _safe_tags when an estimator does not implement
-    # _get_tags
+    # __sklearn_tags__
     assert _safe_tags(estimator, key=key) == expected_results

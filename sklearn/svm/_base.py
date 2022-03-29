@@ -116,9 +116,10 @@ class BaseLibSVM(BaseEstimator, metaclass=ABCMeta):
         self.max_iter = max_iter
         self.random_state = random_state
 
-    def _more_tags(self):
+    def __sklearn_tags__(self):
         # Used by cross_val_score.
-        return {"pairwise": self.kernel == "precomputed"}
+        more_tags = {"pairwise": self.kernel == "precomputed"}
+        return {**super().__sklearn_tags__(), **more_tags}
 
     # TODO: Remove in 1.1
     # mypy error: Decorated property not supported
