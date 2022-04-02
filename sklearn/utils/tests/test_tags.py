@@ -50,7 +50,6 @@ def test_safe_tags_no_get_tags(estimator, key, expected_results):
 
 def test_sklearn_tag1():
     # simple test with adding one parameter to subclass of BaseEstimator 
-    # as intended to be used
     newtag = "requires_y"
     newtagval = True
     class ACustomEstimator(BaseEstimator):
@@ -62,8 +61,7 @@ def test_sklearn_tag1():
     assert newtag in testtags and newtagval == testtags[newtag]
 
 def test_sklearn_tag_multi():
-    # simple test with adding multiple parameters to subclass of BaseEstimator 
-    # as intended to be used
+    # test with adding multiple parameters to subclass of BaseEstimator 
     newtag1 = "requires_y"
     newtagval1 = True
     newtag2 = "requires_z"
@@ -81,7 +79,7 @@ def test_sklearn_tag_multi():
     assert flag
 
 def test_sklearn_tag_extendtags():
-    # simple test with extending tags of a subclass of BaseEstimator 
+    # test with extending tags of a subclass of BaseEstimator 
     newtag1 = "requires_y"
     newtagval1 = True
     newtagval2 = True
@@ -101,7 +99,7 @@ def test_sklearn_tag_extendtags():
 
     assert flag
 
-def test_sklearn_tag_multiInheritance():
+def test_sklearn_tag_nestedInheritance():
     # check if tags exist in subclasses of the Mixins 
     newtag1 = "requires_y"
     newtagval1 = True
@@ -124,6 +122,31 @@ def test_sklearn_tag_multiInheritance():
     assert flag
 
 def test_sklearn_tag_multiInheritance():
+    # check if tags exist in with multiple inherited classes
+    newtag1 = "requires_y"
+    newtagval1 = True
+    newtag2 = "requires_z"
+    newtagval2 = True
+    class ACustomMixin1:
+        def __sklearn_tags__(self):
+            tags = super().__sklearn_tags__()
+            tags[newtag1] = newtagval1
+            return tags
+    class ACustomMixin2:
+        def __sklearn_tags__(self):
+            tags = super().__sklearn_tags__()
+            tags[newtag2] = newtagval2
+            return tags
+    class LotsOfMixins(ACustomMixin1,ACustomMixin2,BaseEstimator):
+        pass
+    testtags = LotsOfMixins().__sklearn_tags__()
+    flag = newtag1 in testtags and newtagval1 == testtags[newtag1]
+    flag and newtag2 in testtags and newtagval2 == testtags[newtag2]
+
+    assert flag
+
+
+def test_sklearn_tag_overwrite():
     # test overwriting tags
     newtag1 = "requires_y"
     newtagval1 = True
@@ -144,13 +167,13 @@ def test_sklearn_tag_multiInheritance():
 
 def test_safe_tag():
     # test _safe_tag with another non BaseEstimator
-    newtag1 = "requires_y"
+    newtag1 = "newtag"
     newtagval1 = True
-    class NoBaseEstimator:
-        def __sklearn__tags__(self):
+    class NotUsingBaseEstimator:
+        def __sklearn_tags__(self):
             return {newtag1: newtagval1}
 
-    testtags = _safe_tags(NoBaseEstimator())
+    testtags = _safe_tags(NotUsingBaseEstimator())
     flag = newtag1 in testtags and newtagval1 == testtags[newtag1]
     assert flag
 
