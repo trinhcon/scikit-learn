@@ -2227,7 +2227,7 @@ def test_cv_pipeline_precomputed():
     pipeline = Pipeline([("kernel_centerer", kcent), ("svr", SVR())])
 
     # did the pipeline set the pairwise attribute?
-    assert pipeline._get_tags()["pairwise"]
+    assert pipeline.__sklearn_tags__()["pairwise"]
 
     # TODO: Remove in 1.1
     msg = r"Attribute `_pairwise` was deprecated in version 0\.24"

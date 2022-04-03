@@ -57,7 +57,7 @@ class MockClassifier:
     def set_params(self, **params):
         return self
 
-    def _more_tags(self):
+    def __sklearn_tags__(self):
         return {"allow_nan": True}
 
 
