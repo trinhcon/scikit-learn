@@ -177,3 +177,20 @@ def test_safe_tag():
     flag = newtag1 in testtags and newtagval1 == testtags[newtag1]
     assert flag
 
+def test_safe_tag_key_not_defined():
+    # when the key is not defined, _safe_tags should
+    # throw an error
+
+    newtag1 = "this_tag_does_not_exist"
+    
+    class Estimator1:
+        def __sklearn_tags__(self):
+            return {}
+
+    exception_thrown = False
+    try:
+        _safe_tags(Estimator1(), newtag1)
+    except ValueError:
+        exception_thrown = True
+    
+    assert exception_thrown
