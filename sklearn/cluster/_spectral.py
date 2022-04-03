@@ -776,11 +776,12 @@ class SpectralClustering(ClusterMixin, BaseEstimator):
         """
         return super().fit_predict(X, y)
 
-    def _more_tags(self):
-        return {
+    def __sklearn_tags__(self):
+        more_tags = {
             "pairwise": self.affinity
             in ["precomputed", "precomputed_nearest_neighbors"]
         }
+        return {**super().__sklearn_tags__(), **more_tags}
 
     # TODO: Remove in 1.1
     # mypy error: Decorated property not supported

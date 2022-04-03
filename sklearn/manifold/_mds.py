@@ -448,8 +448,9 @@ class MDS(BaseEstimator):
         self.n_jobs = n_jobs
         self.random_state = random_state
 
-    def _more_tags(self):
-        return {"pairwise": self.dissimilarity == "precomputed"}
+    def __sklearn_tags__(self):
+        more_tags = {"pairwise": self.dissimilarity == "precomputed"}
+        return {**super().__sklearn_tags__(), **more_tags}
 
     # TODO: Remove in 1.1
     # mypy error: Decorated property not supported

@@ -529,8 +529,9 @@ class MinMaxScaler(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
         X /= self.scale_
         return X
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        more_tags = {"allow_nan": True}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 def minmax_scale(X, feature_range=(0, 1), *, axis=0, copy=True):
@@ -1033,8 +1034,10 @@ class StandardScaler(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
                 X += self.mean_
         return X
 
-    def _more_tags(self):
-        return {"allow_nan": True, "preserves_dtype": [np.float64, np.float32]}
+    def __sklearn_tags__(self):
+        more_tags = {"allow_nan": True,
+                     "preserves_dtype": [np.float64, np.float32]}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 class MaxAbsScaler(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
@@ -1248,8 +1251,9 @@ class MaxAbsScaler(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
             X *= self.scale_
         return X
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        more_tags = {"allow_nan": True}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 def maxabs_scale(X, *, axis=0, copy=True):
@@ -1590,8 +1594,9 @@ class RobustScaler(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
                 X += self.center_
         return X
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        more_tags = {"allow_nan": True}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 def robust_scale(
@@ -1944,8 +1949,9 @@ class Normalizer(TransformerMixin, BaseEstimator):
         X = self._validate_data(X, accept_sparse="csr", reset=False)
         return normalize(X, norm=self.norm, axis=1, copy=copy)
 
-    def _more_tags(self):
-        return {"stateless": True}
+    def __sklearn_tags__(self):
+        more_tags = {"stateless": True}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 def binarize(X, *, threshold=0.0, copy=True):
@@ -2115,8 +2121,9 @@ class Binarizer(TransformerMixin, BaseEstimator):
         X = self._validate_data(X, accept_sparse=["csr", "csc"], copy=copy, reset=False)
         return binarize(X, threshold=self.threshold, copy=False)
 
-    def _more_tags(self):
-        return {"stateless": True}
+    def __sklearn_tags__(self):
+        more_tags = {"stateless": True}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 class KernelCenterer(TransformerMixin, BaseEstimator):
@@ -2258,8 +2265,9 @@ class KernelCenterer(TransformerMixin, BaseEstimator):
 
         return K
 
-    def _more_tags(self):
-        return {"pairwise": True}
+    def __sklearn_tags__(self):
+        more_tags = {"pairwise": True}
+        return {**super().__sklearn_tags__(), **more_tags}
 
     # TODO: Remove in 1.1
     # mypy error: Decorated property not supported
@@ -2766,8 +2774,9 @@ class QuantileTransformer(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator
 
         return self._transform(X, inverse=True)
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        more_tags = {"allow_nan": True}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 def quantile_transform(
@@ -3309,8 +3318,9 @@ class PowerTransformer(_OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
 
         return X
 
-    def _more_tags(self):
-        return {"allow_nan": True}
+    def __sklearn_tags__(self):
+        more_tags = {"allow_nan": True}
+        return {**super().__sklearn_tags__(), **more_tags}
 
 
 def power_transform(X, method="yeo-johnson", *, standardize=True, copy=True):

@@ -555,11 +555,10 @@ class KernelPCA(_ClassNamePrefixFeaturesOutMixin, TransformerMixin, BaseEstimato
         K = self._get_kernel(X, self.X_transformed_fit_)
         return np.dot(K, self.dual_coef_)
 
-    def _more_tags(self):
-        return {
-            "preserves_dtype": [np.float64, np.float32],
-            "pairwise": self.kernel == "precomputed",
-        }
+    def __sklearn_tags__(self):
+        more_tags = {"pairwise": self.kernel == "precomputed",
+                     "preserves_dtype": [np.float64, np.float32]}
+        return {**super().__sklearn_tags__(), **more_tags}
 
     @property
     def _n_features_out(self):
